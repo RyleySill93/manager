@@ -2,9 +2,84 @@ import React from 'react';
 import { Picker, Text } from 'react-native';
 import { Card, CardSection, Input, Button } from './common';
 import { connect } from 'react-redux';
-import { employeeUpdate } from '../actions';
+import { employeeUpdate, employeeCreate } from '../actions';
+import axios from 'axios';
+// import unirest from 'unirest';
+
+const summarizeText = (rawText) => {
+  let length = 2;
+  console.log(rawText);
+  //use figaro to hide api key
+  // axios.post('http://api.smmry.com/?SM_API_KEY=2CA94C7AE9&SM_LENGTH=3&SM_URL=https://en.wikipedia.org/wiki/Computer')
+  //      .then(res => console.log('axios res 1', res));
+
+  axios({
+    method: 'post',
+    url: 'http://api.smmry.com/',
+    params: {
+     "SM_API_KEY": "2CA94C7AE9",
+     "SM_LENGTH": 1,
+     "SM_URL": "https://en.wikipedia.org/wiki/Computer"
+   }}).then(res => console.log('axios res 2', res));
+
+  // axios({
+  //    method: 'post',
+  //    url: 'http://api.smmry.com/',
+  //    params: {
+  //     "SM_API_KEY": "2CA94C7AE9",
+  //     "SM_LENGTH": 1
+  //   },
+  //   headers: { Expect: '' }
+  //   data: {
+  //     sm_api_input: 'A computer is a device that can be instructed to carry out an arbitrary set of arithmetic or logical operations automatically. The ability of computers to follow a sequence of operations, called a program, make computers very applicable to a wide range of tasks. Such computers are used as control systems for a very wide variety of industrial and consumer devices. This includes simple special purpose devices like microwave ovens and remote controls, factory devices such as industrial robots and computer assisted design, but also in general purpose devices.'
+  //   }}).then(res => console.log('axios res 3', res));
+  //
+  // axios({
+  //    method: 'post',
+  //    url: 'http://api.smmry.com/',
+  //    params: {
+  //     "SM_API_KEY": "2CA94C7AE9",
+  //     "SM_LENGTH": 1
+  //   }    data: {
+  //     sm_api_input: 'A computer is a device that can be instructed to carry out an arbitrary set of arithmetic or logical operations automatically. The ability of computers to follow a sequence of operations, called a program, make computers very applicable to a wide range of tasks. Such computers are used as control systems for a very wide variety of industrial and consumer devices. This includes simple special purpose devices like microwave ovens and remote controls, factory devices such as industrial robots and computer assisted design, but also in general purpose devices.'
+  //   }}).then(res => console.log('axios res 3', res));
+
+  // unirest.post('http://api.smmry.com/').query({
+  //         SM_API_KEY: "2CA94C7AE9",
+  //         SM_LENGTH: 3
+  //     }).headers({
+  //         Expect: ''
+  //     });
+
+  // fetch('http://api.smmry.com/', {
+  //      method: 'POST',
+  //      headers: {
+  //        'Accept': 'text/plain',
+  //        'Content-Type': 'text/plain',
+  //      },
+  //      body: {
+  //        "SM_API_KEY": '2CA94C7AE9',
+  //        "SM_URL": 'https://en.wikipedia.org/wiki/Computer',
+  //        "SM_LENGTH": '3'
+  //      }
+  //    }).then(res => console.log('fetch res', res));
+
+ // fetch('http://api.smmry.com/?SM_API_KEY=2CA94C7AE9&SM_LENGTH=3&SM_URL=https://en.wikipedia.org/wiki/Computer', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Accept': 'application/json',
+  //     'Content-Type': 'application/json'
+  //   }
+  // }).then(res => console.log("smmry", res.sm_api_content));
+
+};
 
 class EmployeeCreate extends React.Component {
+
+  onButtonPress () {
+    summarizeText('hi');
+  }
+
   render () {
     return (
       <Card>
@@ -45,7 +120,7 @@ class EmployeeCreate extends React.Component {
         </CardSection>
 
         <CardSection>
-          <Button>
+          <Button onPress={this.onButtonPress.bind(this)}>
             Create!
           </Button>
         </CardSection>
@@ -66,4 +141,6 @@ const mapStateToProps = state => {
   return { name, phone, shift };
 };
 
-export default connect(mapStateToProps, { employeeUpdate })(EmployeeCreate);
+export default connect(mapStateToProps, {
+  employeeUpdate, employeeCreate
+})(EmployeeCreate);
